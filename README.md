@@ -1,7 +1,7 @@
 # The Case of the Curious QC – Clinical Chemistry Interpretation Tool
 
 **Author:** Claire L. Price  
-🔗 [The Case of the Curious QC]((https://claireprice.github.io/The-Case-of-the-Curious-QC/)
+🔗 [The Case of the Curious QC](https://claireprice.github.io/The-Case-of-the-Curious-QC/)
 
 ---
 
