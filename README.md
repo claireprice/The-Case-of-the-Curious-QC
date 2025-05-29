@@ -64,10 +64,11 @@ Under the following terms:
 - Attribution — You must give appropriate credit and indicate if changes were made.
 - NonCommercial — You may not use the material for commercial purposes.
 
+License details: https://creativecommons.org/licenses/by-nc/4.0/
+
 [![DOI](https://zenodo.org/badge/953047379.svg)](https://doi.org/10.5281/zenodo.15547763)
 
 
-License details: https://creativecommons.org/licenses/by-nc/4.0/
 
 
 
