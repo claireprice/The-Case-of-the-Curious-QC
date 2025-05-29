@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this case study in teaching, training, or outreach, please cite it using the metadata below."
+title: "The Case of the Curious QC – Clinical Chemistry Interpretation Tool"
+authors:
+  - family-names: Price
+    given-names: Claire Louise
+    affiliation: Swansea University Medical School, Swansea SA2 8PP UK
+    orcid: "https://orcid.org/0000-0002-6045-4835" 
+date-released: 2025-05-29
+version: "1.0"
+license: "CC-BY-NC-4.0"
+url: "https://claireprice.github.io/The-Case-of-the-Curious-QC/"
+repository-code: "https://github.com/claireprice/The-Case-of-the-Curious-QC"  
+keywords:
+  - quality control
+  - clinical chemistry
+  - interactive case study
+  - biomedical science education
+  - lipid profile interpretation
+  - laboratory diagnostics
+abstract: >
+  The Case of the Curious QC is a browser-based educational tool designed to simulate a quality control 
+  investigation in a clinical biochemistry lab. Through interactive questioning and guided reasoning, users 
+  explore the potential causes of suspicious lipid results and decide how to respond. Designed for students 
+  and educators in laboratory medicine, this tool promotes practical understanding of internal QC principles 
+  and analytical problem-solving. For educational use only.
