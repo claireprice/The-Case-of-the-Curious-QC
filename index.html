@@ -1,6 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZC72PX0ST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+
+  gtag('js', new Date());
+
+  // GA4 config for single-page app (Twine)
+  gtag('config', 'G-XZC72PX0ST', {
+    send_page_view: false
+  });
+</script>
+
+
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1" name="viewport">
 <title>The-Case-of-the-Curious-QC</title>
@@ -12,7 +27,166 @@
 <tw-storydata name="The-Case-of-the-Curious-QC" startnode="1" creator="Twine" creator-version="2.10.0" format="Harlowe" format-version="3.3.9" ifid="6EBF18A3-627B-4403-A39E-8AA78F5F2B4F" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">
 tw-sidebar {
   display: none; 
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="START" tags="" position="800,325" size="100,100">You&#39;re a Biomedical Scientist in the Biochemistry Pathology Lab. It&#39;s Monday morning, and you’re running routine tests on the new Abbott analyser. You’ve just come off a relaxing weekend — but your week is about to take an unexpected turn.
+}</style><script role="script" id="twine-user-script" type="text/twine-javascript">
+(function () {
+  // Ensure GA4 is available
+  if (typeof gtag !== 'function') {
+    console.warn('GA4 not found - gtag() is not defined.');
+    return;
+  }
+
+  var scenarioId = 'curious_qc';
+  var appName = 'case_of_the_curious_qc';
+  var scenarioStarted = false;
+  var turnCounter = 0;
+  var currentPassageName = 'UNKNOWN';
+  var lastPassageElement = null;
+
+  // List of passages that represent endings in your story.
+  // Replace or extend these with the exact passage names from Twine.
+  var endingPassages = [
+    'Contact the manufacturer',
+    'Retest the last EQA sample with a different lot',
+   'Ignore it',
+   'Run split-patient samples on both lots and compare',
+    'Run a parallel test on the backup analyser',
+    'Stop using the new reagent lot immediately'
+  ];
+
+
+  // Optional: map of specific choices to metadata (correct / incorrect etc.)
+  // You can fill this out over time as you refine the case.
+  var choiceMeta = {
+    // 'PASSAGE_NAME_HERE': {
+    //   'Link text shown to the learner': {
+    //     branch_id: 'some_internal_code',
+    //     is_correct: true
+    //   }
+    // }
+  };
+
+  function isEndingPassage(name) {
+    return endingPassages.indexOf(name) !== -1;
+  }
+
+  function handleNewPassage(passageEl) {
+    if (!passageEl || passageEl === lastPassageElement) {
+      return;
+    }
+    lastPassageElement = passageEl;
+
+    var name =
+      passageEl.getAttribute('name') ||
+      passageEl.getAttribute('data-passage') ||
+      passageEl.getAttribute('aria-label') ||
+      'UNKNOWN';
+
+    currentPassageName = name;
+    turnCounter += 1;
+
+    if (!scenarioStarted) {
+      scenarioStarted = true;
+      gtag('event', 'scenario_started', {
+        app_name: appName,
+        scenario_id: scenarioId,
+        start_passage: currentPassageName
+      });
+    }
+
+    gtag('event', 'passage_view', {
+      app_name: appName,
+      scenario_id: scenarioId,
+      passage_name: currentPassageName,
+      turn_number: turnCounter
+    });
+
+    if (isEndingPassage(currentPassageName)) {
+
+      var endingType = 'managed';
+
+      if (currentPassageName === 'Ignore it') {
+    endingType = 'unsafe';
+  } 
+
+
+      gtag('event', 'scenario_finished', {
+        app_name: appName,
+        scenario_id: scenarioId,
+        ending_passage: currentPassageName,
+        ending_type: endingType,
+        total_turns: turnCounter
+      });
+    }
+  }
+
+  function setupPassageObserver() {
+    var storyEl = document.querySelector('tw-story');
+    if (!storyEl) {
+      console.warn('No <tw-story> element found – cannot attach Twine analytics.');
+      return;
+    }
+
+    // In case the first passage is already present
+    var initial = storyEl.querySelector('tw-passage');
+    if (initial) {
+      handleNewPassage(initial);
+    }
+
+    var observer = new MutationObserver(function () {
+      var passages = storyEl.querySelectorAll('tw-passage');
+      if (!passages.length) {
+        return;
+      }
+      var latest = passages[passages.length - 1];
+      handleNewPassage(latest);
+    });
+
+    observer.observe(storyEl, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  // Capture Twine link clicks to log choices
+  function setupChoiceTracking() {
+    document.addEventListener(
+      'click',
+      function (event) {
+        var link = event.target.closest && event.target.closest('tw-link');
+        if (!link) {
+          return;
+        }
+
+        var choiceText = (link.textContent || '').trim();
+        var meta =
+          (choiceMeta[currentPassageName] &&
+            choiceMeta[currentPassageName][choiceText]) ||
+          null;
+
+        gtag('event', 'branch_choice', {
+          app_name: appName,
+          scenario_id: scenarioId,
+          passage_name: currentPassageName,
+          choice_text: choiceText,
+          branch_id: meta ? meta.branch_id : null,
+          is_correct: meta ? meta.is_correct : null
+        });
+      },
+      true // capture phase so we see it before Twine handles navigation
+    );
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    try {
+      setupPassageObserver();
+      setupChoiceTracking();
+    } catch (e) {
+      console.warn('Error initialising Twine GA4 analytics', e);
+    }
+  });
+})();
+</script>
+<tw-passagedata pid="1" name="START" tags="" position="800,325" size="100,100">You&#39;re a Biomedical Scientist in the Biochemistry Pathology Lab. It&#39;s Monday morning, and you’re running routine tests on the new Abbott analyser. You’ve just come off a relaxing weekend — but your week is about to take an unexpected turn.
 
 Start of the Day
 As you log into the LIMS and prepare your QC run for the day, the analyser throws an alert:
@@ -152,4 +326,4 @@ h(Math,"asinh",xr.asinh,Math.asinh(1e300)===Infinity);h(Math,"atanh",xr.atanh,Ma
 </script>
 
 </body>
-</html>
+</>
